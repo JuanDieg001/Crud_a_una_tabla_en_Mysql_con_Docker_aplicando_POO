@@ -5,7 +5,7 @@ def main():
 
     planeta_service = PlanetaService()  # Crear una instancia de PlanetaService    
 
-    while True:
+    while True: #bucle while que se va a ejecutar porque tiene True
         print("""
                --- MENU ---
                1. Crear planeta
@@ -15,8 +15,9 @@ def main():
                5. Salir
         """)
 
-        opcion = int(input("Seleccione una opción: "))
-        match opcion:
+        opcion = int(input("Seleccione una opción: ")) #asigna un valor a la variable opcion para que se pueda usar en el matcha case
+        match opcion: #match case de python
+
             case 1:# se ingresan los valores a la variables
                 nombre = input("Ingrese el nombre del planeta: ")
                 tipo = input("Ingrese el tipo de planeta (Rocoso, Gaseoso, etc.): ")
@@ -52,7 +53,6 @@ def main():
                 planeta_service.borrar(id)
 
             case 5:
-                planeta_service.cerrar_conexion()
                 print("¡Hasta luego! (╯°□°)╯︵ ┻━┻")
                 break
 

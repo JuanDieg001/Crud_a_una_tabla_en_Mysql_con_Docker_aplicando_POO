@@ -1,14 +1,15 @@
 
-# Categoria principal
+# Clase base que representa un cuerpo celeste
 class CuerpoCeleste:
     
-    def __init__(self, id, nombre, tipo):
+    def __init__(self, id, nombre, tipo):#metodo constructor
+        # Inicializa los atributos de la clase
         self.id = id
         self.nombre = nombre
         self.tipo = tipo
 
 
-    # Getters
+    # Getters para los atributos
     @property
     def id(self):
         return self._id
@@ -35,14 +36,16 @@ class CuerpoCeleste:
         self._tipo = tipo
 
 
-# Sub categoría
+# Subclase que representa un planeta, heredando de CuerpoCeleste
 class Planeta(CuerpoCeleste):
+    # Llama al constructor de la clase base
     def __init__(self, id, nombre, tipo, radio, distanciaSol):
+        # Inicializa los atributos específicos de Planeta
         super().__init__(id, nombre, tipo)
         self.radio = radio
         self.distanciaSol = distanciaSol
 
-    # Getters de la clase Planeta
+    # Getters para los atributos adicionales de Planeta
     @property
     def radio(self):
         return self._radio
@@ -51,7 +54,7 @@ class Planeta(CuerpoCeleste):
     def distanciaSol(self):
         return self._distanciaSol
     
-    # Setters de la clase Planeta
+    # Setters para los atributos adicionales de Planeta
     @radio.setter
     def radio(self, radio):
         self._radio = radio
