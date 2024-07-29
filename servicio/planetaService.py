@@ -1,5 +1,16 @@
+# Importa las clases ABC y abstractmethod del módulo abc
+# ABC se usa para definir clases abstractas que no pueden ser instanciadas directamente.
+# abstractmethod se usa para definir métodos que deben ser implementados por las subclases
 from abc import ABC, abstractmethod
+
+# Importa la clase Conexion desde el módulo accessData.conexion
+# accessData es un paquete y conexion es un módulo dentro de él
+# La clase Conexion se usa para manejar la conexión a la base de datos.
 from accessData.conexion import Conexion
+
+# Importa la clase Planeta desde el módulo dominio.dominio
+# dominio es un paquete y dominio es un módulo dentro de él
+# La clase Planeta se usa para representar planetas con atributos como id, nombre, tipo, radio y distancia al sol.
 from dominio.dominio import Planeta
 
 class BaseDatos:# clase abstracata que se usa como plantilla para crear otras clases que requieran los mismo metodos

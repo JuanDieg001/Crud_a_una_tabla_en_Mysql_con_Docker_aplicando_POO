@@ -1,4 +1,11 @@
+# Importa la clase Planeta desde el módulo dominio.dominio
+# De la estructura de directorios donde 'dominio' es un paquete 
+# y dentro de ese paquete hay un archivo llamado 'dominio.py' que define la clase Planeta.
 from dominio.dominio import Planeta
+
+# Importa la clase PlanetaService desde el módulo servicio.planetaService
+# ADe la estructura de directorios donde 'servicio' es otro paquete
+# y dentro de ese paquete hay un archivo llamado 'planetaService.py' que define la clase PlanetaService
 from servicio.planetaService import PlanetaService
 
 def main():
