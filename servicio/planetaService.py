@@ -16,12 +16,12 @@ class BaseDatos:
 
     #Update
     @abstractmethod
-    def actualizar (self, nombre, datos):
+    def actualizar (self, id, datos):
         pass
 
     #Delete
     @abstractmethod
-    def borrar (self, nombre):
+    def borrar (self, id):
         pass
 
 
@@ -30,7 +30,7 @@ class PlanetaService(BaseDatos):
     def __init__(self):
         pass
     
-    def crear(self, datos):
+    def crear(self, datos):#modulo para crear planetas
 
         self.connection = Conexion.obtener_conexion()
         self.cursor = self.connection.cursor()
@@ -52,3 +52,61 @@ class PlanetaService(BaseDatos):
         finally:
             #cierra el cursor, liberando así los recursos asociados a ese cursor.
             self.cursor.close()
+            self.connection.close()
+    
+    def leer(self, nombre=None):
+        
+        self.connection = Conexion.obtener_conexion()
+        self.cursor = self.connection.cursor()
+        
+        try:
+            sql = "SELECT * FROM planeta"
+            if nombre:
+                sql += " WHERE nombre = %s"
+                self.cursor.execute(sql, (nombre,))
+            else:
+                self.cursor.execute(sql)
+
+            lista = []
+            for (id, nombre, tipo, radio, distanciaSol) in self.cursor:
+                lista.append(Planeta(id, nombre, tipo, radio, distanciaSol))
+            return lista
+        
+        except Exception as err:
+            print("Error en la ejecución de la consulta:", err)
+            self.connection.rollback()
+        
+        finally:
+            self.cursor.close()
+            self.connection.close()
+
+    def actualizar(self, id, datos):
+        try:
+            self.connection = Conexion.obtener_conexion()
+            self.cursor = self.connection.cursor()
+            sql = "UPDATE planeta SET nombre=%s, tipo=%s, radio=%s, distancia_sol=%s WHERE id=%s"
+            valores = (datos.nombre, datos.tipo, datos.radio, datos.distanciaSol, id)
+            self.cursor.execute(sql, valores)
+            self.connection.commit()
+            print("Planeta actualizado exitosamente.")
+        except Exception as err:
+            print("Error en la actualizacion:", err)
+            self.connection.rollback()
+        finally:
+            self.cursor.close()
+            self.connection.close()
+
+    def borrar(self, id):
+        try:
+            self.connection = Conexion.obtener_conexion()
+            self.cursor = self.connection.cursor()
+            sql = "DELETE FROM planeta WHERE id=%s"
+            self.cursor.execute(sql, (id,))
+            self.connection.commit()
+            print("Planeta eliminado")
+        except Exception as err:
+            print("Error en la eliminación:", err)
+            self.connection.rollback()
+        finally:
+            self.cursor.close()
+            self.connection.close()

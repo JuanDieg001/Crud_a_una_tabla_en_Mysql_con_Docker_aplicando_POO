@@ -12,7 +12,7 @@ class Conexion:
                 database="sistema_solar",
                 port = "3307"
             )
-            print("Conexión correcta")
+            print("Conexión correcta :D ")
             return conexion
         except mysql.connector.Error as error:
             print(f"Error al conectarse en la base de datos: {error}")
