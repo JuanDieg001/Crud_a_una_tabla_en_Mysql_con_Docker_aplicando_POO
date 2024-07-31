@@ -1,0 +1,5 @@
+2024-07-31 12:59:27 - se crea el planeta 1  
+2024-07-31 12:59:36 - se ingreso al metodo leer: 1  
+2024-07-31 12:59:46 - se ingreso al metodo leer: None  
+2024-07-31 13:00:02 - se actualizo el planeta: 2  
+2024-07-31 13:00:19 - se elimino el planeta con el id: 6  

@@ -13,6 +13,9 @@ from accessData.conexion import Conexion
 # La clase Planeta se usa para representar planetas con atributos como id, nombre, tipo, radio y distancia al sol.
 from dominio.dominio import Planeta
 
+from servicio.logService import LogService
+
+
 class BaseDatos:# clase abstracata que se usa como plantilla para crear otras clases que requieran los mismo metodos
 
     #Create
@@ -40,16 +43,21 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
 
     
     def __init__(self): #metodo constructor de la clase PlanetaSservice que inicializa con valores None
+        # Inicializa los atributos de la clase
+        # 'connection' y 'cursor' se inicializan en None
         self.connection = None
         self.cursor = None
-    
-    def __init__(self): #en progreso...
-        pass
+        # Inicializa el atributo 'registro' con una nueva instancia de LogService
+        self.registro = LogService()
     
     def crear(self, datos):#modulo para crear planetas en la BdD
 
+        # Llama al método 'logger' del objeto 'registro'
+        self.registro.logger("se crea el planeta: "+str(datos.nombre))
+
         # Obtiene una conexión a la base de datos mediante el método 'obtener_conexion' de la clase 'Conexion'.
         self.connection = Conexion.obtener_conexion()
+
         # Crea un cursor a partir de la conexión obtenida. El cursor se usa para ejecutar comandos SQL y manipular la base de datos.
         self.cursor = self.connection.cursor()
         
@@ -84,12 +92,19 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
     
     def leer(self, nombre=None):#modulo para leer planetas en la BdD
         
+        
+        
+        # Llama al método 'logger' del objeto 'registro'
+        self.registro.logger("se ingreso al metodo leer: "+str(nombre))
+
         # Obtiene una conexión a la base de datos mediante el método 'obtener_conexion' de la clase 'Conexion'.
         self.connection = Conexion.obtener_conexion()
+
         # Crea un cursor a partir de la conexión obtenida. El cursor se usa para ejecutar comandos SQL y manipular la base de datos.
         self.cursor = self.connection.cursor()
-        
+
         try:
+        
             # Define la consulta SQL básica que selecciona todas las columnas de la tabla 'planeta'
             sql = "SELECT * FROM planeta"
 
@@ -100,13 +115,14 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
 
                 # Ejecuta la consulta SQL con el nombre proporcionado como parámetro
                 self.cursor.execute(sql, (nombre,))
-            else:
 
+            else:
                 # Si 'nombre' no se proporciona, ejecuta la consulta SQL sin ninguna cláusula WHERE
                 self.cursor.execute(sql)
 
             # Inicializa una lista vacía para almacenar los objetos 'Planeta'
             lista = []
+
             # Recorre todos los resultados devueltos por la consulta SQL
             for (id, nombre, tipo, radio, distanciaSol) in self.cursor:
                 # Crea una instancia del objeto 'Planeta' para cada fila de resultados
@@ -128,12 +144,17 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
             self.connection.close()
 
     def actualizar(self, id, datos):#metodo para actualizar planetas en la BdD
-        try:
-            # Obtiene una conexión a la base de datos mediante el método 'obtener_conexion' de la clase 'Conexion'.
-            self.connection = Conexion.obtener_conexion()
-            # Crea un cursor a partir de la conexión obtenida. El cursor se usa para ejecutar comandos SQL y manipular la base de datos.
-            self.cursor = self.connection.cursor()
+        
+        # Llama al método 'logger' del objeto 'registro'
+        self.registro.logger("se actualizo el planeta: "+str(datos.nombre))
 
+        # Obtiene una conexión a la base de datos mediante el método 'obtener_conexion' de la clase 'Conexion'.
+        self.connection = Conexion.obtener_conexion()
+
+        # Crea un cursor a partir de la conexión obtenida. El cursor se usa para ejecutar comandos SQL y manipular la base de datos.
+        self.cursor = self.connection.cursor()
+
+        try:
             # Define una consulta SQL para actualizar un registro en la tabla 'planeta'.
             # Se establecen nuevos valores para las columnas 'nombre', 'tipo', 'radio' y 'distancia_sol'
             # en el registro que coincida con el 'id' proporcionado.
@@ -151,10 +172,12 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
             # Confirma los cambios realizados en la base de datos.
             self.connection.commit()
             print("Planeta actualizado exitosamente.")
+
         except Exception as err:
             print("Error en la actualizacion:", err)
             # Deshacer la transacción en caso de error
             self.connection.rollback()
+
         finally:
             #cierra el cursor, liberando así los recursos asociados a ese cursor.
             self.cursor.close()
@@ -162,13 +185,17 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
             self.connection.close()
 
     def borrar(self, id):#metodo para borrar planetas en la BdD
+        
+         # Llama al método 'logger' del objeto 'registro'
+        self.registro.logger("se elimino el planeta con el id: "+str(id))
+        
+        # Obtiene una conexión a la base de datos mediante el método 'obtener_conexion' de la clase 'Conexion'.
+        self.connection = Conexion.obtener_conexion()
+
+        # Crea un cursor a partir de la conexión obtenida. El cursor se usa para ejecutar comandos SQL y manipular la base de datos.
+        self.cursor = self.connection.cursor()
+
         try:
-            # Obtiene una conexión a la base de datos mediante el método 'obtener_conexion' de la clase 'Conexion'.
-            self.connection = Conexion.obtener_conexion()
-
-            # Crea un cursor a partir de la conexión obtenida. El cursor se usa para ejecutar comandos SQL y manipular la base de datos.
-            self.cursor = self.connection.cursor()
-
             # Define una consulta SQL para eliminar un registro de la tabla 'planeta'.
             # El registro a eliminar es el que coincide con el 'id' proporcionado.
             sql = "DELETE FROM planeta WHERE id=%s"
@@ -180,10 +207,12 @@ class PlanetaService(BaseDatos):#clase que usa los metodos de la clase abstracat
             # Confirma los cambios realizados en la base de datos.
             self.connection.commit()
             print("Planeta eliminado")
+
         except Exception as err:
             print("Error en la eliminación:", err)
             # Deshacer la transacción en caso de error
             self.connection.rollback()
+            
         finally:
             #cierra el cursor, liberando así los recursos asociados a ese cursor.
             self.cursor.close()
